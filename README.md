@@ -1,12 +1,8 @@
-# Basic Webpack Kit
+# Lista 08 de EDA II - Grafos
 
-A basic set of configurations to start a web project in JavaScript.
-
-## How to use it:
-
-* `index.html`: The front-end of your project, there you should set the views and stuff;
-* `main.js`: The real JS code of your project should be written here;
-* `bundle.js`: This file saves your code from ES6 to ES5, so it can work on any browser;
+#### Alunos:
+* Gabriela Barrozo Guedes - 16/0121612
+* Vitor Leal dos Santos - 16/0148375
 
 
 ## How to run it:
