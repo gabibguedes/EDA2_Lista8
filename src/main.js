@@ -1,6 +1,12 @@
+import {USERNAME, PASSWORD} from './login_info';
 const axios = require('axios');
 
-axios.get('https://api.twitter.com/1.1/users/show.json?user_id=2670498805')
+axios.get('https://api.github.com/repos/gabibguedes/JogoDaVida',{
+	header:{
+		login: USERNAME,
+		password: PASSWORD
+	}
+})
 .then((response) => {
 	console.log(response.data)
 })
