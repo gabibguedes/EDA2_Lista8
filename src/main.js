@@ -3,7 +3,6 @@ const axios = require('axios');
 const vis = require('vis');
 
 var followers = [];
-var followers_img = [];
 
 axios.get('https://api.github.com/users/vitorl-s/followers',{
 	header:{
@@ -13,42 +12,20 @@ axios.get('https://api.github.com/users/vitorl-s/followers',{
 	}
 })
 .then((response,filter,role) => {
-	console.log(response.data)
 	var aux = response.data;
-	aux.forEach(function(item,index){
-		followers.push(response.data[index].login);
-	});
 	aux.forEach(function (item, index) {
-		followers_img.push(response.data[index].avatar_url);
+		followers.push({ login: response.data[index].login, image: response.data[index].avatar_url });;
 	});
-	console.log(followers_img);
 })
 
 document.addEventListener('DOMContentLoaded', function () {
-	
-
 	var container = document.querySelector('#graph');
-
 	var data = {
-		nodes: [
-			{
-				id: 1,
-				shape: 'image',
-				image: 'https://lenguajehtml.com/img/html5-logo.png',
-				label: 'HTML5'
-			},
-			{
-				id: 2,
-				shape: 'image',
-				image: 'https://lenguajecss.com/img/css3-logo.png',
-				label: 'CSS3'
-			},
-		],
-		edges: [
-			{ from: 1, to: 2 }
-		]
+		nodes: [{ id: 1, shape: 'image', image: 'https://avatars2.githubusercontent.com/u/31254028?v=4' },
+				{ id: 2, shape: 'image', image: 'https://avatars2.githubusercontent.com/u/31254028?v=4'}
+			   ],
+		edges: [{from:1, to:2}]
 	}
-
 	var options = {
 		nodes: {
 			borderWidth: 0,
