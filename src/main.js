@@ -2,47 +2,58 @@ import {USERNAME, PASSWORD,TOKEN} from './login_info';
 const axios = require('axios');
 const vis = require('vis');
 
+
+
+var git = document.getElementById("git");
+var btn = document.getElementById("btn");
+
 var followers = [];
 var following = [];
-const requisicao = async (followers) => {
-	const api = axios.create({
-		baseURL: 'https://api.github.com/users/' + USERNAME + '/followers',
-		headers: {
-			'Authorization': {
-				username: USERNAME,
-				password: PASSWORD
+	
+const addTask = () =>{
+	const requisicao = async (followers) => {
+		console.log('começando requisições');
+		console.log(git.value);
+		const api = axios.create({
+			baseURL: 'https://api.github.com/users/' + git.value + '/followers',
+			headers: {
+				'Authorization': {
+					username: USERNAME,
+					password: PASSWORD
+				}
 			}
-		}
-	});
-
-	var response = await api.get('https://api.github.com/users/' + USERNAME + '/followers', {
-		auth: {
-			username: USERNAME,
-			password: PASSWORD,
-			token: TOKEN
-		}
-	})
-		.then((response) => {
-			var aux = response.data;
-			aux.forEach(function (item, index) {
-				followers.push({ 
-					id: index, 
-					shape:'image', 
-					image: response.data[index].avatar_url, 
-					name: response.data[index].login }
-				);
-			});
-		})
-		var fof = [];
-		var j = 0;
-	await followers.forEach(async (item,index)=>{
-		var response2 = await api.get('https://api.github.com/users/' + item.name + '/followers', {
+		});
+	
+		var response = await api.get('https://api.github.com/users/' + git.value + '/following', {
 			auth: {
 				username: USERNAME,
 				password: PASSWORD,
 				token: TOKEN
 			}
 		})
+		.then((response) => {
+				var aux = response.data;
+				aux.forEach(function (item, index) {
+					followers.push({ 
+						id: index, 
+						shape:'image', 
+						image: response.data[index].avatar_url, 
+						name: response.data[index].login }
+					);
+				});
+		})
+		var fof = [];
+	
+	
+	
+		for (const item in followers) {
+			var response2 =  await api.get('https://api.github.com/users/' + followers[item].name+ '/followers', {
+				auth: {
+					username: USERNAME,
+					password: PASSWORD,
+					token: TOKEN
+				}
+			})
 			.then((response2) => {
 				var listUsers = [];
 				response2.data.forEach((item,index2) =>{
@@ -50,17 +61,28 @@ const requisicao = async (followers) => {
 				})
 				fof.push(listUsers);
 			})
-		});
-}
-
- 	document.addEventListener('DOMContentLoaded', function () {
-	requisicao(followers).then((api) => {
-
-		var container = document.querySelector('#graph');
-		var data = {
-			nodes: followers,
-			edges: [{from:0, to:1}]
 		}
+	
+		for(var i = 0 ; i < followers.length; i++){
+			for(var j = 0; j< fof[i].length; j++){
+				for(var k = 0; k< followers.length; k++){
+					if(fof[i][j] == followers[k].name){
+						following.push({from: i, to: k});
+					}
+				}
+			}				
+		}
+		
+	}
+
+	document.addEventListener('DOMContentLoaded', function () {
+		requisicao(followers).then((api) => {
+			console.log('requisição feita')
+			var container = document.querySelector('#graph');
+			var data = {
+				nodes: followers,
+				edges: following
+			}
 			var options = {
 				nodes: {
 					borderWidth: 0,
@@ -78,6 +100,11 @@ const requisicao = async (followers) => {
 					}
 				},
 				edges: {
+					arrows: {
+						to:     {enabled: false, scaleFactor:1, type:'arrow'},
+						middle: {enabled: false, scaleFactor:1, type:'arrow'},
+						from:   {enabled: true, scaleFactor:1, type:'arrow'}
+					  },
 					color: {
 						color: '#CCC',
 						highlight: '#A22'
@@ -92,3 +119,10 @@ const requisicao = async (followers) => {
 		
 		});
 	})
+
+}
+btn.onclick = addTask;
+
+
+
+
