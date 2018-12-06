@@ -6,8 +6,10 @@
 </head>
 <body>
     <div id="dados">
-      <input id="git" type="text" placeholder="Insira seu usuário do github">
+      <input id="git" type="text" placeholder="Insira o usuário do github">
       <button id="btn" onclick="generateGraph()">Ver Grafo</button>
+      <button id="btn2" onclick="clear()" >Buscar no Grafo</button>
+
     </div>
     <div id="graph"></div>
     <script src="bundle.js"> </script>
@@ -29,7 +31,7 @@ button{
   align-items: center;
 }
 
-#btn, #solve, #solvetrue {
+#btn, #btn2, #solve, #solvetrue {
 	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
 	box-shadow:inset 0px 1px 0px 0px #ffffff;
@@ -68,6 +70,14 @@ div {
   flex-direction: column;
   align-items: center;
   margin: 5px;
+}
+
+.hide{
+display:none;
+}
+
+.show{
+display:block;
 }
 </style>
 </html>

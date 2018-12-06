@@ -2,10 +2,9 @@ import {USERNAME, PASSWORD,TOKEN} from './login_info';
 const axios = require('axios');
 const vis = require('vis');
 
-
-
 var git = document.getElementById("git");
 var btn = document.getElementById("btn");
+var btn2 = document.getElementById("btn2");
 
 var followers = [];
 var following = [];
@@ -77,7 +76,7 @@ const requisicao = async (followers) => {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-
+	btn2.classList.add('hide')	
 	var container = document.querySelector('#graph');
 
 	var data = {
@@ -116,22 +115,39 @@ document.addEventListener('DOMContentLoaded', function () {
 			hoverWidth: .05
 		}
 	}
-	
-	var network = new vis.Network(container, data, options);
 
-	function generateGraph(){
-		requisicao(followers).then((api) => {
+	var network = new vis.Network(container, data, options);
+	async function generateGraph(){
+		await requisicao(followers).then(async(api) => {
+			git.value = '';
 			console.log('requisições feitas')
 			data = {
 				nodes: followers,
 				edges: following
 			}
-			network.setData(data)
-
+			await network.setData(data);
+			await btn.setAttribute('disabled', 'disabled');
+			await btn.classList.add('hide')
+			await btn2.classList.add('show')	
 		});
 	}
+	async function clear(){
+		var select = followers.find(x => x.label ===git.value)
+		if (select === undefined){
+			alert('Usuário não encontrado!')
+		}else{
+			network.selectNodes([select.id])
+		}
+	}
+
+	function cria(){
+		data = {
+			nodes: [],
+			edges: []
+		}
+		network = new vis.Network(container, data, options);
+	}
 	btn.onclick = generateGraph;
+	btn2.onclick = clear;
 	
 });
-
-
